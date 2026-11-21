@@ -6,6 +6,9 @@ import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import OrganizerLayout from '@/layouts/organizer-layout';
+import PlayerLayout from '@/layouts/player-layout';
+import AdminLayout from '@/layouts/admin-layout';
 import { ConfigProvider } from "antd";
 import { sampickleTheme } from './theme/sampickle-theme';
 
@@ -18,11 +21,15 @@ void createInertiaApp({
             case name === 'welcome':
                 return null;
             case name.startsWith('admin/'):
-                return AuthLayout;
+                return AdminLayout;
             case name.startsWith('organizer/'):
-                return [AppLayout, SettingsLayout];
+                return OrganizerLayout;
             case name.startsWith('player/'):
+                return PlayerLayout;
+            case name.startsWith('auth/'):
                 return AuthLayout;
+            case name.startsWith('settings/'):
+                return [AppLayout, SettingsLayout];
             default:
                 return AppLayout;
         }
