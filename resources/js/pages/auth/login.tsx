@@ -1,117 +1,100 @@
-import { Form, Head } from '@inertiajs/react';
-import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { register } from '@/routes';
-import { store } from '@/routes/login';
-import { request } from '@/routes/password';
-import PasskeyVerify from '@/components/passkey-verify';
+import React from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { Button, Checkbox } from 'antd';
+import { LoginOutlined } from '@ant-design/icons';
 
-type Props = {
-    status?: string;
-    canResetPassword: boolean;
-};
+export default function Login() {
+    const { data, setData, post, processing, errors } = useForm({
+        email: '',
+        password: '',
+        remember: false,
+    });
 
-export default function Login({ status, canResetPassword }: Props) {
+    const submit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post('/login');
+    };
+
     return (
-        <>
-            <Head title="Log in" />
+        <div className="space-y-6">
+            <Head title="Sign In - SamPickle" />
 
-            <PasskeyVerify />
-
-            <Form
-                {...store.form()}
-                resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
-            >
-                {({ processing, errors }) => (
-                    <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
-                                    required
-                                    autoFocus
-                                    tabIndex={1}
-                                    autoComplete="email"
-                                    placeholder="email@example.com"
-                                />
-                                <InputError message={errors.email} />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                    {canResetPassword && (
-                                        <TextLink
-                                            href={request()}
-                                            className="ml-auto text-sm"
-                                            tabIndex={5}
-                                        >
-                                            Forgot your password?
-                                        </TextLink>
-                                    )}
-                                </div>
-                                <PasswordInput
-                                    id="password"
-                                    name="password"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                />
-                                <InputError message={errors.password} />
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    tabIndex={3}
-                                />
-                                <Label htmlFor="remember">Remember me</Label>
-                            </div>
-
-                            <Button
-                                type="submit"
-                                className="mt-4 w-full"
-                                tabIndex={4}
-                                disabled={processing}
-                                data-test="login-button"
-                            >
-                                {processing && <Spinner />}
-                                Log in
-                            </Button>
-                        </div>
-
-                        <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                Sign up
-                            </TextLink>
-                        </div>
-                    </>
-                )}
-            </Form>
-
-            {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
+            <form onSubmit={submit} className="space-y-4">
+                {/* Email Address */}
+                <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                        Email Address *
+                    </label>
+                    <input
+                        type="email"
+                        required
+                        autoFocus
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        placeholder="your.email@example.com"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                    />
+                    {errors.email && (
+                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                    )}
                 </div>
-            )}
-        </>
+
+                {/* Password */}
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-semibold text-slate-700">
+                            Password *
+                        </label>
+                    </div>
+                    <input
+                        type="password"
+                        required
+                        value={data.password}
+                        onChange={(e) => setData('password', e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                    />
+                    {errors.password && (
+                        <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                    )}
+                </div>
+
+                {/* Remember Me */}
+                <div className="flex items-center justify-between pt-1">
+                    <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            checked={data.remember}
+                            onChange={(e) => setData('remember', e.target.checked)}
+                            className="rounded border-slate-300 text-emerald-700 focus:ring-emerald-600"
+                        />
+                        <span>Remember me on this device</span>
+                    </label>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={processing}
+                    icon={<LoginOutlined />}
+                    className="w-full h-11 font-bold text-sm bg-[#064E2B] hover:bg-[#075F35] text-white mt-2"
+                >
+                    Sign In
+                </Button>
+            </form>
+
+            <div className="text-center text-sm text-slate-500 pt-2 border-t border-slate-100">
+                Don't have an account yet?{' '}
+                <Link href="/register" className="font-semibold text-emerald-700 hover:text-emerald-800">
+                    Create an account
+                </Link>
+            </div>
+        </div>
     );
 }
 
 Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
+    title: 'Welcome Back',
+    description: 'Sign in to access your tournament brackets or player dashboard',
 };

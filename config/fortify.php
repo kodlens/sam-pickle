@@ -161,7 +161,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Features::registration(), // Handled by our own RegisteredUserController
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([

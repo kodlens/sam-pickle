@@ -1,225 +1,284 @@
-import { useState, useEffect } from 'react';
-import { Form, Head, Link } from '@inertiajs/react';
-import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { login } from '@/routes';
-import { store } from '@/routes/register';
-import { Tag } from 'antd';
-import { TrophyOutlined, UserOutlined, ShopOutlined } from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { Tag, Button } from 'antd';
+import { UserOutlined, TrophyOutlined, RocketOutlined } from '@ant-design/icons';
 
-type Props = {
-    passwordRules: string;
-};
-
-export default function Register({ passwordRules }: Props) {
-    const [role, setRole] = useState<'player' | 'organizer'>('player');
+export default function Register() {
+    const { data, setData, post, processing, errors } = useForm({
+        role: 'player',
+        fname: '',
+        mname: '',
+        lname: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        organization_name: '',
+        city: '',
+        skill_rating: '3.5',
+    });
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const roleParam = params.get('role');
         if (roleParam === 'organizer' || roleParam === 'player') {
-            setRole(roleParam);
+            setData('role', roleParam);
         }
     }, []);
 
+    const submit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post('/register');
+    };
+
     return (
-        <>
-            <Head title="Create Your SamPickle Account" />
+        <div className="space-y-6">
+            <Head title="Create Your Account - SamPickle" />
 
             {/* ROLE SELECTOR CARDS */}
-            <div className="grid grid-cols-2 gap-3 mb-2">
-                <button
-                    type="button"
-                    onClick={() => setRole('player')}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                        role === 'player'
-                            ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950 ring-2 ring-emerald-600/20'
-                            : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                    }`}
-                >
-                    <div className="flex items-center gap-1.5 font-bold text-sm">
-                        <UserOutlined className={role === 'player' ? 'text-emerald-700' : 'text-slate-400'} />
-                        <span>Player</span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 m-0 mt-1 leading-tight">
-                        Compete & earn badges
-                    </p>
-                </button>
+            <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                    Choose Account Type
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                    <button
+                        type="button"
+                        onClick={() => setData('role', 'player')}
+                        className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                            data.role === 'player'
+                                ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950 ring-2 ring-emerald-600/20'
+                                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                        }`}
+                    >
+                        <div className="flex items-center gap-1.5 font-bold text-sm">
+                            <UserOutlined className={data.role === 'player' ? 'text-emerald-700' : 'text-slate-400'} />
+                            <span>Player</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 m-0 mt-1 leading-tight">
+                            Compete & earn badges
+                        </p>
+                    </button>
 
-                <button
-                    type="button"
-                    onClick={() => setRole('organizer')}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                        role === 'organizer'
-                            ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950 ring-2 ring-emerald-600/20'
-                            : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                    }`}
-                >
-                    <div className="flex items-center gap-1.5 font-bold text-sm">
-                        <TrophyOutlined className={role === 'organizer' ? 'text-amber-600' : 'text-slate-400'} />
-                        <span>Organizer</span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 m-0 mt-1 leading-tight">
-                        Host & run tournaments
-                    </p>
-                </button>
+                    <button
+                        type="button"
+                        onClick={() => setData('role', 'organizer')}
+                        className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                            data.role === 'organizer'
+                                ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950 ring-2 ring-emerald-600/20'
+                                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                        }`}
+                    >
+                        <div className="flex items-center gap-1.5 font-bold text-sm">
+                            <TrophyOutlined className={data.role === 'organizer' ? 'text-amber-600' : 'text-slate-400'} />
+                            <span>Organizer</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 m-0 mt-1 leading-tight">
+                            Host tournaments & courts
+                        </p>
+                    </button>
+                </div>
             </div>
 
-            {role === 'organizer' && (
+            {data.role === 'organizer' && (
                 <div className="rounded-lg bg-emerald-50 p-2.5 border border-emerald-200 text-xs text-emerald-900 flex items-center justify-between">
                     <span className="font-semibold">Includes 14-Day Free Pro Trial</span>
-                    <Tag color="success" className="m-0 text-[10px]">No Card Needed</Tag>
+                    <Tag color="success" className="m-0 text-[10px] font-bold">No Card Needed</Tag>
                 </div>
             )}
 
-            <Form
-                {...store.form()}
-                resetOnSuccess={['password', 'password_confirmation']}
-                disableWhileProcessing
-                className="flex flex-col gap-5 mt-2"
-            >
-                {({ processing, errors }) => (
+            <form onSubmit={submit} className="space-y-4">
+                {/* Organizer Specific Fields */}
+                {data.role === 'organizer' && (
                     <>
-                        {/* Hidden role input */}
-                        <input type="hidden" name="role" value={role} />
-
-                        <div className="grid gap-4">
-                            {/* Role specific: Organizer fields */}
-                            {role === 'organizer' && (
-                                <>
-                                    <div className="grid gap-1.5">
-                                        <Label htmlFor="organization_name">Organization / Club Name *</Label>
-                                        <Input
-                                            id="organization_name"
-                                            type="text"
-                                            required
-                                            tabIndex={1}
-                                            name="organization_name"
-                                            placeholder="e.g. Austin Pickleball Association"
-                                        />
-                                        <InputError message={errors.organization_name} />
-                                    </div>
-
-                                    <div className="grid gap-1.5">
-                                        <Label htmlFor="city">City / State</Label>
-                                        <Input
-                                            id="city"
-                                            type="text"
-                                            tabIndex={2}
-                                            name="city"
-                                            placeholder="e.g. Austin, TX"
-                                        />
-                                        <InputError message={errors.city} />
-                                    </div>
-                                </>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                                Organization / Club Name *
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                value={data.organization_name}
+                                onChange={(e) => setData('organization_name', e.target.value)}
+                                placeholder="e.g. Austin Pickleball Club"
+                                className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                            />
+                            {errors.organization_name && (
+                                <p className="text-red-500 text-xs mt-1">{errors.organization_name}</p>
                             )}
-
-                            {/* Role specific: Player fields */}
-                            {role === 'player' && (
-                                <div className="grid gap-1.5">
-                                    <Label htmlFor="skill_rating">Self-Assessed Skill Rating</Label>
-                                    <select
-                                        id="skill_rating"
-                                        name="skill_rating"
-                                        defaultValue="3.5"
-                                        className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                    >
-                                        <option value="2.5">2.5 - Beginner / Social</option>
-                                        <option value="3.0">3.0 - Intermediate Novice</option>
-                                        <option value="3.5">3.5 - Intermediate Competitor</option>
-                                        <option value="4.0">4.0 - Advanced Tournament Player</option>
-                                        <option value="4.5">4.5 - Expert Competitor</option>
-                                        <option value="5.0+">5.0+ - Pro / Open Division</option>
-                                    </select>
-                                    <InputError message={errors.skill_rating} />
-                                </div>
-                            )}
-
-                            {/* Common Name */}
-                            <div className="grid gap-1.5">
-                                <Label htmlFor="name">Your Full Name *</Label>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    required
-                                    autoComplete="name"
-                                    name="name"
-                                    placeholder="Jane Doe"
-                                />
-                                <InputError message={errors.name} />
-                            </div>
-
-                            {/* Common Email */}
-                            <div className="grid gap-1.5">
-                                <Label htmlFor="email">Email Address *</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    required
-                                    autoComplete="email"
-                                    name="email"
-                                    placeholder="jane@example.com"
-                                />
-                                <InputError message={errors.email} />
-                            </div>
-
-                            {/* Password */}
-                            <div className="grid gap-1.5">
-                                <Label htmlFor="password">Password *</Label>
-                                <PasswordInput
-                                    id="password"
-                                    required
-                                    autoComplete="new-password"
-                                    name="password"
-                                    placeholder="Create password"
-                                    passwordrules={passwordRules}
-                                />
-                                <InputError message={errors.password} />
-                            </div>
-
-                            {/* Confirm Password */}
-                            <div className="grid gap-1.5">
-                                <Label htmlFor="password_confirmation">Confirm Password *</Label>
-                                <PasswordInput
-                                    id="password_confirmation"
-                                    required
-                                    autoComplete="new-password"
-                                    name="password_confirmation"
-                                    placeholder="Repeat password"
-                                    passwordrules={passwordRules}
-                                />
-                                <InputError message={errors.password_confirmation} />
-                            </div>
-
-                            <Button
-                                type="submit"
-                                className="mt-2 w-full bg-[#064E2B] hover:bg-[#075F35] text-white font-bold h-11"
-                                data-test="register-user-button"
-                            >
-                                {processing && <Spinner />}
-                                {role === 'organizer' ? 'Register as Organizer' : 'Create Player Account'}
-                            </Button>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground mt-2">
-                            Already have an account?{' '}
-                            <TextLink href={login()}>
-                                Log in
-                            </TextLink>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">
+                                City / Location
+                            </label>
+                            <input
+                                type="text"
+                                value={data.city}
+                                onChange={(e) => setData('city', e.target.value)}
+                                placeholder="e.g. Austin, TX"
+                                className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                            />
+                            {errors.city && (
+                                <p className="text-red-500 text-xs mt-1">{errors.city}</p>
+                            )}
                         </div>
                     </>
                 )}
-            </Form>
-        </>
+
+                {/* Player Specific Fields */}
+                {data.role === 'player' && (
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Self-Assessed Skill Rating
+                        </label>
+                        <select
+                            value={data.skill_rating}
+                            onChange={(e) => setData('skill_rating', e.target.value)}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                        >
+                            <option value="2.5">2.5 - Beginner / Social Player</option>
+                            <option value="3.0">3.0 - Intermediate Novice</option>
+                            <option value="3.5">3.5 - Intermediate Competitor</option>
+                            <option value="4.0">4.0 - Advanced Tournament Player</option>
+                            <option value="4.5">4.5 - Expert Competitor</option>
+                            <option value="5.0+">5.0+ - Pro / Open Division</option>
+                        </select>
+                        {errors.skill_rating && (
+                            <p className="text-red-500 text-xs mt-1">{errors.skill_rating}</p>
+                        )}
+                    </div>
+                )}
+
+                {/* Name Fields: First, Middle, Last */}
+                <div className="grid grid-cols-2 gap-3">
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            First Name *
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            value={data.fname}
+                            onChange={(e) => setData('fname', e.target.value)}
+                            placeholder="Juan"
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                        />
+                        {errors.fname && (
+                            <p className="text-red-500 text-xs mt-1">{errors.fname}</p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Middle Name
+                        </label>
+                        <input
+                            type="text"
+                            value={data.mname}
+                            onChange={(e) => setData('mname', e.target.value)}
+                            placeholder="Optional"
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                        />
+                        {errors.mname && (
+                            <p className="text-red-500 text-xs mt-1">{errors.mname}</p>
+                        )}
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                        Last Name *
+                    </label>
+                    <input
+                        type="text"
+                        required
+                        value={data.lname}
+                        onChange={(e) => setData('lname', e.target.value)}
+                        placeholder="Dela Cruz"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                    />
+                    {errors.lname && (
+                        <p className="text-red-500 text-xs mt-1">{errors.lname}</p>
+                    )}
+                </div>
+
+                {/* Email Address */}
+                <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                        Email Address *
+                    </label>
+                    <input
+                        type="email"
+                        required
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        placeholder="juan@example.com"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                    />
+                    {errors.email && (
+                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                    )}
+                </div>
+
+                {/* Password & Confirmation */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Password *
+                        </label>
+                        <input
+                            type="password"
+                            required
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
+                            placeholder="••••••••"
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                        />
+                        {errors.password && (
+                            <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Confirm Password *
+                        </label>
+                        <input
+                            type="password"
+                            required
+                            value={data.password_confirmation}
+                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                            placeholder="••••••••"
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                        />
+                        {errors.password_confirmation && (
+                            <p className="text-red-500 text-xs mt-1">{errors.password_confirmation}</p>
+                        )}
+                    </div>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={processing}
+                    icon={<RocketOutlined />}
+                    className="w-full h-11 font-bold text-sm bg-[#064E2B] hover:bg-[#075F35] text-white mt-2"
+                >
+                    {data.role === 'organizer' ? 'Register as Organizer' : 'Create Player Account'}
+                </Button>
+            </form>
+
+            <div className="text-center text-sm text-slate-500 pt-2 border-t border-slate-100">
+                Already have an account?{' '}
+                <Link href="/login" className="font-semibold text-emerald-700 hover:text-emerald-800">
+                    Sign in here
+                </Link>
+            </div>
+        </div>
     );
 }
 
 Register.layout = {
     title: 'Join SamPickle',
-    description: 'Create your account to start competing or hosting tournaments',
+    description: 'Register as an organizer or player in seconds',
 };
