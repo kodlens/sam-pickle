@@ -32,6 +32,7 @@ class RegisteredUserController extends Controller
             'fname' => ['required', 'string', 'max:255'],
             'mname' => ['nullable', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
+            'sex' => ['required', 'string', 'in:male,female'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::defaults()],
             'role' => ['required', 'string', 'in:player,organizer'],
@@ -41,6 +42,7 @@ class RegisteredUserController extends Controller
         ], [
             'fname.required' => 'First name is required.',
             'lname.required' => 'Last name is required.',
+            'sex.required' => 'Please select biological sex (required for tournament division bracket eligibility).',
             'organization_name.required_if' => 'Organization or club name is required for tournament organizers.',
         ]);
 
@@ -52,6 +54,7 @@ class RegisteredUserController extends Controller
                 'fname' => $request->fname,
                 'mname' => $request->mname,
                 'lname' => $request->lname,
+                'sex' => strtolower($request->sex),
                 'name' => $fullName,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),

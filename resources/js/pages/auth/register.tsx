@@ -24,6 +24,7 @@ export default function Register() {
         fname: '',
         mname: '',
         lname: '',
+        sex: 'male',
         email: '',
         password: '',
         password_confirmation: '',
@@ -403,6 +404,48 @@ export default function Register() {
                                     )}
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Biological Sex (Gender) for Tournament Bracket Eligibility */}
+                        <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                                <label className="block text-xs font-semibold text-slate-700">
+                                    Sex <span className="text-red-500">*</span>
+                                </label>
+                                <span className="text-[11px] text-slate-400">
+                                    For division brackets (Men's / Women's / Mixed)
+                                </span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setData('sex', 'male')}
+                                    className={`py-2.5 px-4 rounded-xl border text-sm transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                                        data.sex === 'male'
+                                            ? 'border-emerald-700 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-700/20 font-bold'
+                                            : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                                    }`}
+                                >
+                                    <UserOutlined className={data.sex === 'male' ? 'text-emerald-700' : 'text-slate-400'} />
+                                    <span>Male</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setData('sex', 'female')}
+                                    className={`py-2.5 px-4 rounded-xl border text-sm transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                                        data.sex === 'female'
+                                            ? 'border-emerald-700 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-700/20 font-bold'
+                                            : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                                    }`}
+                                >
+                                    <UserOutlined className={data.sex === 'female' ? 'text-emerald-700' : 'text-slate-400'} />
+                                    <span>Female</span>
+                                </button>
+                            </div>
+                            {errors.sex && (
+                                <p className="text-red-500 text-xs mt-1 m-0">{errors.sex}</p>
+                            )}
                         </div>
 
                         {/* Email Address */}

@@ -20,6 +20,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string|null $fname
  * @property string|null $mname
  * @property string|null $lname
+ * @property string|null $sex
  * @property string $name
  * @property string $email
  * @property string $role
@@ -42,6 +43,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
     'fname',
     'mname',
     'lname',
+    'sex',
     'name',
     'email',
     'password',
@@ -54,6 +56,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
     'trial_ends_at',
 ])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
+
 class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */

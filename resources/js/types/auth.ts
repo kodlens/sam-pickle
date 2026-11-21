@@ -25,6 +25,7 @@ export type User = {
     id: number;
     name: string;
     email: string;
+    sex?: 'male' | 'female' | string;
     avatar?: string;
     role: 'player' | 'organizer' | 'admin';
     active_role: 'player' | 'organizer' | 'admin';
