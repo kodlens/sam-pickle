@@ -14,26 +14,20 @@ import {
     Tooltip,
 } from 'antd';
 import {
-    ArrowRightOutlined,
     CalendarOutlined,
     TrophyOutlined,
     TeamOutlined,
     CheckCircleFilled,
     ThunderboltFilled,
-    EnvironmentOutlined,
     SafetyCertificateOutlined,
     RocketOutlined,
     MobileOutlined,
-    CheckOutlined,
-    PlayCircleOutlined,
     UserOutlined,
     CrownFilled,
-    FireFilled,
     AimOutlined,
     NotificationOutlined,
-    AuditOutlined,
-    ClockCircleOutlined,
 } from '@ant-design/icons';
+
 import { login, register } from '@/routes';
 
 const { Title, Paragraph, Text } = Typography;

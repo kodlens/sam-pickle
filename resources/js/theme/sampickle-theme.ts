@@ -50,6 +50,21 @@ export const sampickleTheme: ThemeConfig = {
             // Text button
             textHoverBg: "#F0FDF4",
         },
+
+        Select: {
+            // Dropdown option states
+            optionActiveBg: "#F0FDF4",
+            optionSelectedBg: "#F0FDF4", //the color change when hovering to other options
+            optionSelectedColor: "white",
+            optionSelectedFontWeight: 600,
+
+            // Select input states
+            activeBorderColor: "#064E2B",
+            activeOutlineColor: "rgba(6, 78, 43, 0.12)",
+            hoverBorderColor: "#16A34A",
+
+        },
+
         Layout: {
             headerBg: "#FFFFFF",
             headerColor: "#0F172A",

@@ -141,3 +141,25 @@
         @apply bg-background text-foreground;
     }
 }
+
+
+/* Normal hovered option */
+.ant-select-dropdown
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: #F0FDF4;
+    color: #064E2B;
+}
+
+/* Selected option */
+.ant-select-dropdown
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: #DCFCE7;
+    color: #064E2B;
+}
+
+/* Selected AND hovered option */
+.ant-select-dropdown
+.ant-select-item-option-selected.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: #BBF7D0;
+    color: #064E2B;
+}

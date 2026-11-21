@@ -1,5 +1,6 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
+import PlayerLayout from '@/layouts/player-layout';
 import {
     Card,
     Row,
@@ -41,8 +42,16 @@ export default function PlayerDashboard({
     stats,
 }: PlayerDashboardProps) {
     return (
-        <div className="space-y-6">
-            <Head title="Player Dashboard - SamPickle" />
+        <PlayerLayout
+            breadcrumbs={[
+                {
+                    title: 'Player Dashboard',
+                    href: '/player/dashboard',
+                },
+            ]}
+        >
+            <div className="space-y-6">
+                <Head title="Player Dashboard - SamPickle" />
 
             {/* Top Welcome Banner */}
             <div className="bg-gradient-to-r from-slate-900 via-emerald-950 to-[#064E2B] rounded-2xl p-6 sm:p-8 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
@@ -179,14 +188,6 @@ export default function PlayerDashboard({
                 </Card>
             </div>
         </div>
+        </PlayerLayout>
     );
 }
-
-PlayerDashboard.layout = {
-    breadcrumbs: [
-        {
-            title: 'Player Dashboard',
-            href: '/player/dashboard',
-        },
-    ],
-};

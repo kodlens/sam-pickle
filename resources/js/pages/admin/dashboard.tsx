@@ -1,5 +1,6 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
+import AdminLayout from '@/layouts/admin-layout';
 import {
     Card,
     Row,
@@ -27,8 +28,16 @@ interface AdminDashboardProps {
 
 export default function AdminDashboard({ metrics }: AdminDashboardProps) {
     return (
-        <div className="space-y-6">
-            <Head title="System Admin Dashboard - SamPickle" />
+        <AdminLayout
+            breadcrumbs={[
+                {
+                    title: 'Admin Dashboard',
+                    href: '/admin/dashboard',
+                },
+            ]}
+        >
+            <div className="space-y-6">
+                <Head title="System Admin Dashboard - SamPickle" />
 
             <div className="bg-zinc-900 rounded-2xl p-6 sm:p-8 text-white shadow-md flex items-center justify-between">
                 <div>
@@ -90,14 +99,6 @@ export default function AdminDashboard({ metrics }: AdminDashboardProps) {
                 </Col>
             </Row>
         </div>
+        </AdminLayout>
     );
 }
-
-AdminDashboard.layout = {
-    breadcrumbs: [
-        {
-            title: 'Admin Dashboard',
-            href: '/admin/dashboard',
-        },
-    ],
-};

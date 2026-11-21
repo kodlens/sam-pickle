@@ -1,5 +1,6 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
+import OrganizerLayout from '@/layouts/organizer-layout';
 import {
     Card,
     Row,
@@ -41,8 +42,16 @@ export default function OrganizerDashboard({
     stats,
 }: OrganizerDashboardProps) {
     return (
-        <div className="space-y-6">
-            <Head title="Organizer Dashboard - SamPickle" />
+        <OrganizerLayout
+            breadcrumbs={[
+                {
+                    title: 'Organizer Dashboard',
+                    href: '/organizer/dashboard',
+                },
+            ]}
+        >
+            <div className="space-y-6">
+                <Head title="Organizer Dashboard - SamPickle" />
 
             {/* Top Welcome Banner */}
             <div className="bg-gradient-to-r from-[#064E2B] via-[#075F35] to-[#04341D] rounded-2xl p-6 sm:p-8 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
@@ -177,14 +186,6 @@ export default function OrganizerDashboard({
                 </div>
             </Card>
         </div>
+        </OrganizerLayout>
     );
 }
-
-OrganizerDashboard.layout = {
-    breadcrumbs: [
-        {
-            title: 'Organizer Dashboard',
-            href: '/organizer/dashboard',
-        },
-    ],
-};

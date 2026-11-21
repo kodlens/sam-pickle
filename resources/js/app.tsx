@@ -1,49 +1,28 @@
-import '@ant-design/v5-patch-for-react-19';
 import { createInertiaApp } from '@inertiajs/react';
-import { Toaster } from '@/components/ui/sonner';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { initializeTheme } from '@/hooks/use-appearance';
-import AppLayout from '@/layouts/app-layout';
-import AuthLayout from '@/layouts/auth-layout';
-import SettingsLayout from '@/layouts/settings/layout';
-import OrganizerLayout from '@/layouts/organizer-layout';
-import PlayerLayout from '@/layouts/player-layout';
-import AdminLayout from '@/layouts/admin-layout';
-import { ConfigProvider } from "antd";
+import { App as AntApp, ConfigProvider } from 'antd';
 import { sampickleTheme } from './theme/sampickle-theme';
+import { initializeTheme } from '@/hooks/use-appearance';
 
 const appName = import.meta.env.VITE_APP_NAME || 'SamPickle';
 
+// Set light / dark mode on load
+initializeTheme();
+
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    layout: (name) => {
-        switch (true) {
-            case name === 'welcome':
-                return null;
-            case name.startsWith('admin/'):
-                return AdminLayout;
-            case name.startsWith('organizer/'):
-                return OrganizerLayout;
-            case name.startsWith('player/'):
-                return PlayerLayout;
-            case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
-            default:
-                return AppLayout;
-        }
-    },
     strictMode: true,
     withApp(app) {
         return (
             <ConfigProvider theme={sampickleTheme}>
-                {app}
+                <AntApp>
+                    {app}
+                </AntApp>
             </ConfigProvider>
         );
     },
     progress: {
-        color: '#4B5563',
+        color: '#064E2B',
     },
 });
 
-// This will set light / dark mode on load...
-initializeTheme();
+
