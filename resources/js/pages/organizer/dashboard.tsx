@@ -71,19 +71,19 @@ export default function OrganizerDashboard({
                         Create divisions, generate single/double elimination brackets, and monitor live match scoring in real time.
                     </p>
                 </div>
-                <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                     <Button
                         type="primary"
                         size="large"
                         icon={<PlusOutlined />}
-                        className="bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold border-none"
+                        className="bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold border-none w-full sm:w-auto"
                     >
                         Create New Tournament
                     </Button>
                     <Button
                         size="large"
                         icon={<MobileOutlined />}
-                        className="bg-white/10 hover:bg-white/20 text-white border-white/30"
+                        className="bg-white/10 hover:bg-white/20 text-white border-white/30 w-full sm:w-auto"
                     >
                         Referee Scorer PINs
                     </Button>

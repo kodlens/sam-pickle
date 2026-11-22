@@ -71,13 +71,13 @@ export default function PlayerDashboard({
                         Track upcoming match alerts, view live courtside tournament brackets, and level up your badges.
                     </p>
                 </div>
-                <div className="flex flex-wrap items-center gap-3 shrink-0">
-                    <a href="/#tournaments">
+                <div className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <a href="/#tournaments" className="w-full sm:w-auto">
                         <Button
                             type="primary"
                             size="large"
                             icon={<SearchOutlined />}
-                            className="bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold border-none"
+                            className="bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold border-none w-full sm:w-auto"
                         >
                             Find Tournaments
                         </Button>

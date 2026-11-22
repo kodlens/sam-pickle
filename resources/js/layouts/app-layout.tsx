@@ -144,7 +144,7 @@ export default function AppLayout({
     ];
 
     return (
-        <Layout className="min-h-screen bg-slate-50 flex flex-col font-sans">
+        <Layout className="min-h-screen bg-slate-50 flex flex-col font-sans w-full overflow-x-hidden">
             {/* LIVE MATCH TICKER (TOP BAR) */}
             <div className="bg-[#042816] text-emerald-100 text-xs py-1.5 px-4 sm:px-8 border-b border-emerald-900/60 z-50">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -399,7 +399,7 @@ export default function AppLayout({
             )}
 
             {/* Main Content */}
-            <Content className="flex-1">
+            <Content className="flex-1 w-full overflow-x-hidden min-w-0">
                 {fullWidth ? (
                     children
                 ) : (
