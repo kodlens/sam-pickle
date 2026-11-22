@@ -163,7 +163,7 @@ return [
     'features' => [
         // Features::registration(), // Handled by our own RegisteredUserController
         Features::resetPasswords(),
-        Features::emailVerification(),
+        // Features::emailVerification(), // Handled by our own EmailVerificationController in routes/auth.php
         Features::twoFactorAuthentication([
             'confirm' => true,
             'confirmPassword' => true,
